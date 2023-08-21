@@ -1,50 +1,43 @@
 import { useParams } from "react-router-dom";
-import { InfoContainer, Stats } from "./Profile.styles";
-import { initialState as ProfileData } from "../../Redux/ProfileData";
+import { InfoContainer, Info, Stats, Bio } from "./Profile.styles";
+import { initialState as profileData } from "../../Redux/ProfileData";
 import { initialState as postData } from "../../Redux/PostData";
 import CheckCircle from "@mui/icons-material/CheckCircle";
-import { Info } from "./Profile.styles";
-import { Bio } from "./Profile.styles";
-
-// import { Fragment } from "react";
-
 const ProfileInfo = () => {
   const { id } = useParams();
   console.log("id", id);
   let filteredPosts = postData.filter((post) => {
     return post.userID === id;
-  })
+  });
   return (
     <>
-      {ProfileData[id] ? (
+      {profileData[id] ? (
         <InfoContainer>
-          <img src={ProfileData[id].profilePic} />
+          <img src={profileData[id].profilePic} alt="profile picture" />
           <Info>
-            <p>
-              {ProfileData[id].userID}
-              {ProfileData[id].verified ? (
+            <p className="owner-ID">
+              {profileData[id].userID}
+              {profileData[id].verified ? (
                 <CheckCircle className="verified" />
               ) : null}
             </p>
             <Stats>
               <p>
-                <strong>{filteredPosts.length}</strong>
+                <strong>{filteredPosts.length}</strong> Posts
               </p>
               <p>
-                <strong>{ProfileData[id].followers}</strong>Followers
+                <strong>{profileData[id].followers}</strong> Followers
               </p>
               <p>
-                <strong>{ProfileData[id].following}</strong>following
+                <strong>{profileData[id].following}</strong> following
               </p>
             </Stats>
             <Bio>
               <p className="name">
-                <strong>{ProfileData[id].name}</strong>
+                <strong>{profileData[id].name}</strong>
               </p>
-              <p className="category">
-                <strong>{ProfileData[id].category}</strong>
-              </p>
-              <p>{ProfileData[id].Bio}</p>
+              <p className="category">{profileData[id].category}</p>
+              <p>{profileData[id].bio}</p>
             </Bio>
           </Info>
         </InfoContainer>
