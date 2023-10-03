@@ -3,8 +3,9 @@ import { InfoContainer, Info, Stats, Bio, LoadIcon } from "./Profile.styles";
 // import { initialState as profileData } from "../../Redux/ProfileData";
 import { initialState as postData } from "../../Redux/PostData";
 import CheckCircle from "@mui/icons-material/CheckCircle";
-import { Fragment, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import CreateProfile from "./CreateProfile";
+import axios from "axios";
 const ProfileInfo = () => {
   const { id } = useParams();
   console.log("id", id);
@@ -14,20 +15,32 @@ const ProfileInfo = () => {
   const [profile, setProfile] = useState(null);
   const [isProfileCreated, setIsProfileCreated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-  if (isLoading) {  
+  useEffect(() => {
+    const url = `http://localhost:8000/api/profiles/${id}`;
+    axios
+      .get(url)
+      .then((response) => {
+        console.log("res", response.data);
+        setProfile(response.data);
+        setIsLoading(false);
+      })
+      .catch((error) => {
+        console.error("Error fetching profile:", error);
+        setIsLoading(false);
+      });
+  }, [id, isProfileCreated]);
+  if (isLoading) {
     return <LoadIcon>Loading...</LoadIcon>;
   }
   return (
     <Fragment>
       {profile ? (
         <InfoContainer>
-          <img src='' alt="profile picture" />
+          <img src="" alt="profile picture" />
           <Info>
             <p className="owner-ID">
               {profile.userID}
-              {profile.verified ? (
-                <CheckCircle className="verified" />
-              ) : null}
+              {profile.verified ? <CheckCircle className="verified" /> : null}
             </p>
             <Stats>
               <p>
@@ -51,7 +64,10 @@ const ProfileInfo = () => {
         </InfoContainer>
       ) : (
         <InfoContainer>
-          <CreateProfile userID={id} />
+          <CreateProfile
+            userID={id}
+            setIsProfileCreated={setIsProfileCreated}
+          /> 
         </InfoContainer>
       )}
     </Fragment>

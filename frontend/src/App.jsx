@@ -12,12 +12,14 @@ import { useEffect } from "react";
 import axios from "axios";
 
 function App() {
+  const dispatch = useDispatch();
   useEffect (()=>{
     const getProfiles = async() => {
       try {
         const url = 'http://localhost:8000/api/profiles';
         const res = await axios.get(url);
         console.log("profileData",res.data);
+        dispatch(saveProfileData(res.data));
       } catch (error) {
         console.error("error",error);
       }
