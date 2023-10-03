@@ -10,7 +10,7 @@ import {
 } from "./Register.styles";
 import instagram from "../../assets/images/instagram-logo.png";
 import { Link, useNavigate } from "react-router-dom";
-import axios from 'axios';
+import axios from "axios";
 import { useDispatch } from "react-redux";
 import { saveUserID } from "../../Redux/UserData";
 
@@ -29,7 +29,7 @@ const Register = () => {
     let obj = { ...formData, [key]: e.target.value };
     setFormData(obj);
   };
-  const handleSubmit = async(e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     console.log("formData", formData);
     const unFilledFields = Object.keys(formData).filter(
@@ -42,7 +42,7 @@ const Register = () => {
     }
     try {
       const url = "http://localhost:8000/api/auth/register";
-      const response = await axios.post(url,formData);
+      const response = await axios.post(url, formData);
       console.log(response.data);
       dispatch(saveUserID(response.data.userID));
       setFormData({
@@ -53,7 +53,7 @@ const Register = () => {
       });
       navigate("/home");
     } catch (error) {
-      console.error('Error registering user:' , error.response.data); 
+      console.error("Error registering user:", error.response.data);
       setError(error.response.data.message);
     }
   };

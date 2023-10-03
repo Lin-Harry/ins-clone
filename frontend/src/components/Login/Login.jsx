@@ -11,7 +11,7 @@ import {
 import instagram from "../../assets/images/instagram-logo.png";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
-import { setAuthToken } from "../../apiconfig";
+import { setAuthToken } from "../../apiConfig";
 import { useDispatch } from "react-redux";
 import { saveUserID } from "../../Redux/UserData";
 
@@ -27,7 +27,7 @@ const Login = () => {
     let obj = { ...formData, [key]: e.target.value };
     setFormData(obj);
   };
-  const handleSubmit = async(e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     console.log("formData", formData);
     const unfilledFields = Object.keys(formData).filter(
@@ -38,23 +38,17 @@ const Login = () => {
       return;
     }
     try {
-      const url = 'http://localhost:8000/api/auth/login';
+      const url = "http://localhost:8000/api/auth/login";
       const response = await axios.post(url, formData);
-      console.log (response.data);
+      console.log(response.data);
       setAuthToken(response.data.token);
       dispatch(saveUserID(response.data.userID));
-      setFormData({
-        username: "",
-        password: ""
-      })
-      navigate('/home')
+      setFormData({ username: "", password: "" });
+      navigate("/home");
     } catch (error) {
-      console.error ('Error logging in', error.response.data);
-      setError (error.response.data.message);
+      console.error("Error logging in:", error.response.data);
+      setError(error.response.data.message);
     }
-    // console.log("ready to login");
-    //Redirect to the home page
-    // navigate("/home");
   };
 
   return (

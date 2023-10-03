@@ -2,9 +2,8 @@ import InstagramIcon from "@mui/icons-material/Instagram";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
 import TwitterIcon from "@mui/icons-material/Twitter";
 import GitHubIcon from "@mui/icons-material/GitHub";
-import { Container } from "./Contact.style";
+import { Container } from "./Contact.styles";
 import { useParams } from "react-router-dom";
-
 const Contact = () => {
   const { id } = useParams();
   return (
@@ -17,7 +16,7 @@ const Contact = () => {
           <h2>{`${id}@gmail.com`}</h2>
         </div>
         <div className="social-media">
-          <div className="instargram handle">
+          <div className="instagram handle">
             <a
               target="_blank"
               href="https://www.instagram.com"
@@ -33,7 +32,7 @@ const Contact = () => {
               href="https://www.linkedin.com"
               rel="noopner noreferrer"
             >
-              linkedin
+              Linkedin
             </a>
             <LinkedInIcon />
           </div>
@@ -43,7 +42,7 @@ const Contact = () => {
               href="https://www.github.com"
               rel="noopner noreferrer"
             >
-              github
+              Github
             </a>
             <GitHubIcon />
           </div>
@@ -64,4 +63,3 @@ const Contact = () => {
 };
 
 export default Contact;
-
