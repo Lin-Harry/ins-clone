@@ -36,7 +36,10 @@ const ProfileInfo = () => {
     <Fragment>
       {profile ? (
         <InfoContainer>
-          <img src="" alt="profile picture" />
+          <img
+            src={`http://localhost:8000/api/profiles/image/${profile.userID}`}
+            alt="profile picture"
+          />
           <Info>
             <p className="owner-ID">
               {profile.userID}
@@ -67,7 +70,7 @@ const ProfileInfo = () => {
           <CreateProfile
             userID={id}
             setIsProfileCreated={setIsProfileCreated}
-          /> 
+          />
         </InfoContainer>
       )}
     </Fragment>
