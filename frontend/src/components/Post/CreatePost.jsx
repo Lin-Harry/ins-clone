@@ -7,12 +7,16 @@ import {
 } from "../Profile/Profile.styles";
 import { axiosInstance } from "../../apiConfig";
 import Navbar from "../Navbar/Navbar";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import {savePostData} from '../../Redux/PostData';
+import { useNavigate } from "react-router-dom";
 
 const min = 1;
 const max = 1000;
 const randomNumber = Math.floor(Math.random() * (max - min + 1)) + min;
 export default function CreatePost() {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const userID = useSelector((state) => state.user.userID);
   const allPosts = useSelector((state) => state.post.postData);
   console.log("allPosts", allPosts);
@@ -63,6 +67,9 @@ export default function CreatePost() {
       });
       const updatedPosts = await axiosInstance.get("/api/posts");
       console.log("updatedPosts", updatedPosts);
+      dispatch(savePostData(updatedPosts.data));
+      setIsPostCreated(true);
+      navigate('/home');
     } catch (error) {
       console.error('Error uploading post:', error)
     }
