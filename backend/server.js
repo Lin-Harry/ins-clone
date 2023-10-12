@@ -3,7 +3,7 @@ const cors = require("cors");
 const fileUpload = require("express-fileupload");
 const authRoutes = require("./routes/authRoutes");
 const profileRoutes = require("./routes/profileRoutes");
-const postRoutes = require('./routes/postRoutes');
+const postRoutes = require("./routes/postRoutes");
 const connectDB = require("./config/db");
 //create a web server
 const app = express();

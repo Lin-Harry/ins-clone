@@ -14,16 +14,18 @@ const Navbar = () => {
   const userID = useSelector((state) => state.user.userID);
   const profiles = useSelector((state) => state.profile.profileData);
   const currentProfile = profiles.length
-    ? profiles.filter((profiles) => profiles.userID === userID)
+    ? profiles.filter((profile) => profile.userID === userID)
     : null;
   const [dropdownState, setDropdownState] = useState(false);
   const [imgPath, setImgPath] = useState("");
+
   useEffect(() => {
     if (currentProfile) {
       const url = `http://localhost:8000/api/profiles/image/${userID}`;
       setImgPath(url);
     }
   }, [currentProfile, userID]);
+
   const handleSubmit = (e) => {
     e.preventDefault();
     const value = searchValue.current.value;

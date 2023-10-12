@@ -14,32 +14,32 @@ import axios from "axios";
 
 function App() {
   const dispatch = useDispatch();
-  useEffect (()=>{
-    const getProfiles = async() => {
+  useEffect(() => {
+    const getProfiles = async () => {
       try {
-        const url = 'http://localhost:8000/api/profiles';
+        const url = "http://localhost:8000/api/profiles";
         const res = await axios.get(url);
-        console.log("profileData",res.data);
+        console.log("profileData", res.data);
         dispatch(saveProfileData(res.data));
       } catch (error) {
-        console.error("error",error);
+        console.error("error", error);
       }
-    }
+    };
     getProfiles();
-  },[]);
-  useEffect(()=>{
-    const getPosts = async ()=> {
+  }, []);
+  useEffect(() => {
+    const getPosts = async () => {
       try {
-        const url = 'http://localhost:8000/api/posts';
+        const url = "http://localhost:8000/api/posts";
         const res = await axios.get(url);
-        console.log('postData',res.data);
+        console.log("postData", res.data);
         dispatch(savePostData(res.data));
       } catch (error) {
-        console.error('error',error)
+        console.error("error", error);
       }
     };
     getPosts();
-  },[]);
+  }, []);
   return (
     <Router>
       <Routes>

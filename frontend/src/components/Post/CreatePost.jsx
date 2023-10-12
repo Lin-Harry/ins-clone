@@ -8,9 +8,8 @@ import {
 import { axiosInstance } from "../../apiConfig";
 import Navbar from "../Navbar/Navbar";
 import { useSelector, useDispatch } from "react-redux";
-import {savePostData} from '../../Redux/PostData';
+import { savePostData } from "../../Redux/PostData";
 import { useNavigate } from "react-router-dom";
-
 const min = 1;
 const max = 1000;
 const randomNumber = Math.floor(Math.random() * (max - min + 1)) + min;
@@ -60,18 +59,18 @@ export default function CreatePost() {
     formDataToSubmit.append("comments", formData.comments);
     formDataToSubmit.append("postID", formData.postID);
     try {
-      await axiosInstance.post('/api/posts',formDataToSubmit,{
-        headers:{
-          "Content-Type":"multipart/form-data"
+      await axiosInstance.post("/api/posts", formDataToSubmit, {
+        headers: {
+          "Content-Type": "multipart/form-data",
         },
       });
       const updatedPosts = await axiosInstance.get("/api/posts");
       console.log("updatedPosts", updatedPosts);
       dispatch(savePostData(updatedPosts.data));
       setIsPostCreated(true);
-      navigate('/home');
+      navigate("/home");
     } catch (error) {
-      console.error('Error uploading post:', error)
+      console.error("Error uploading post:", error);
     }
   };
   return (

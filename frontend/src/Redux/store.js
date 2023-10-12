@@ -5,8 +5,7 @@ import postDataSlice from "./PostData";
 export default configureStore({
   reducer: {
     user: userSlice,
-    profile:userProfileSlice,
+    profile: userProfileSlice,
     post: postDataSlice,
   },
 });
-

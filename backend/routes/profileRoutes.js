@@ -3,7 +3,7 @@ const {
   createProfile,
   getUserProfile,
   getAllProfiles,
-  getProfileImage
+  getProfileImage,
 } = require("../controllers/profileController");
 const router = express.Router();
 

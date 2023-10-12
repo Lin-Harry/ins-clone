@@ -1,22 +1,22 @@
 import { useParams } from "react-router-dom";
 import { InfoContainer, Info, Stats, Bio, LoadIcon } from "./Profile.styles";
-// import { initialState as profileData } from "../../Redux/ProfileData";
-// import { initialState as postData } from "../../Redux/PostData";
 import CheckCircle from "@mui/icons-material/CheckCircle";
 import { Fragment, useEffect, useState } from "react";
 import CreateProfile from "./CreateProfile";
 import axios from "axios";
 import { useSelector } from "react-redux";
+
 const ProfileInfo = () => {
   const { id } = useParams();
   console.log("id", id);
-  const postData = useSelector((state)=> state.post.postData);
+  const postData = useSelector((state) => state.post.postData);
   let filteredPosts = postData.filter((post) => {
     return post.userID === id;
   });
   const [profile, setProfile] = useState(null);
   const [isProfileCreated, setIsProfileCreated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+
   useEffect(() => {
     const url = `http://localhost:8000/api/profiles/${id}`;
     axios
@@ -26,11 +26,12 @@ const ProfileInfo = () => {
         setProfile(response.data);
         setIsLoading(false);
       })
-      .catch((error) => {
-        console.error("Error fetching profile:", error);
+      .catch((err) => {
+        console.error("Error fetching profile:", err);
         setIsLoading(false);
       });
   }, [id, isProfileCreated]);
+
   if (isLoading) {
     return <LoadIcon>Loading...</LoadIcon>;
   }
