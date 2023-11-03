@@ -7,8 +7,11 @@ import {
   ErrMessage,
 } from "./Profile.styles";
 import { axiosInstance } from "../../apiConfig";
+import {saveProfileData} from "../../Redux/ProfileData";
+import {useDispatch} from 'react-redux';
 // eslint-disable-next-line react/prop-types
 export default function CreateProfile({ userID, setIsProfileCreated }) {
+  const dispatch = useDispatch();
   const [formData, setFormData] = useState({
     name: "",
     category: "",
@@ -48,6 +51,9 @@ export default function CreateProfile({ userID, setIsProfileCreated }) {
         formDataToSubmit,
         { headers: { "Content-Type": "multipart/form-data" } }
       );
+      const updateProfiles = await axiosInstance.get('./api/profiles');
+      console.log("", updateProfiles);
+      dispatch(saveProfileData(updateProfiles.data));
       setIsProfileCreated(true);
       console.log("profile uploaded successfully:", response.data);
     } catch (error) {

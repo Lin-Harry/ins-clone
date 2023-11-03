@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useId } from "react";
 import styled from "styled-components";
 import { useState } from "react";
 import { Link } from "react-router-dom";
@@ -9,10 +9,59 @@ import ChatBubbleOutlineOutlinedIcon from "@mui/icons-material/ChatBubbleOutline
 import TelegramIcon from "@mui/icons-material/Telegram";
 import BookmarkBorderIcon from "@mui/icons-material/BookmarkBorder";
 import SentimentSatisfiedOutlinedIcon from "@mui/icons-material/SentimentSatisfiedOutlined";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import {
+  handleLikesSingleClick,
+  handleLikeDoubleClick,
+} from "../../Redux/PostData";
 
 export default function Post() {
-  const allPosts = useSelector((state) => state.post.postData);
+  const dispatch = useDispatch();
+  const allPosts = useSelector((state) => state.post.postData); 
+  const userID = useSelector((state) => state.user.userID);
+  const [comment, setComment] = useState(() => "");
+  const updatePostData = async (id, updateObj) => {
+    try {
+      const url = `/api/posts/${id}`;
+      await axiosInstance.put(url, updateObj);
+    } catch (error) {
+      console.error("Error updating post data:", error);
+    }
+  };
+  const handlePostComment = (postData, text) => {
+    let updateObj = {
+      comments: [...postData["comments"], [userID, text]],
+      isLiked: postData.isLiked,
+      likes: postData.likes,
+    };
+    updatePostData(postData._id, updateObj);
+    setComment("");
+  };
+  const handlePostLikes = (type, postData) => {
+    let updatedPost = { ...postData };
+    let likes = "";
+    if (type === "singleClick") {
+      updatedPost.isLiked = !postData.isLiked;
+      likes = String(
+        parseInt(updatedPost.likes, 10) + (updatedPost.isLiked ? 1 : -1)
+      );
+      updatedPost.likes = likes;
+      dispatch(handleLikesSingleClick(updatedPost));
+    } else if (type === "doubleClick") {
+      updatedPost.isLiked = true;
+      likes = String(
+        parseInt(updatedPost.likes, 10) + (postData.isLiked ? 0 : 1)
+      );
+      updatedPost.likes = likes;
+      dispatch(handleLikeDoubleClick(updatedPost));
+    }
+    let updateObj = {
+      isLiked: type === "singleClick" ? !postData.isLiked : true,
+      likes: likes,
+      comments: [...postData.comments],
+    };
+    updatePostData(postData._id, updateObj);
+  };
   return (
     <Container>
       {allPosts && allPosts.length > 0 ? (
@@ -35,7 +84,7 @@ export default function Post() {
                 </div>
                 <MoreHorizIcon />
               </UserInfo>
-              <Media>
+              <Media onDoubleClick={() => handlePostLikes("doubleClick", post)}>
                 <FavoriteIcon className={`like-post-${post.postID}`} />
                 <img
                   src={`http://localhost:8000/api/posts/image/${post._id}`}
@@ -47,6 +96,7 @@ export default function Post() {
                   <div className="actions">
                     <FavoriteIcon
                       className={`like-icon ${post.isLiked ? "liked" : ""} `}
+                      onClick={() => handlePostLikes("singleClick", post)}
                     />
                     <ChatBubbleOutlineOutlinedIcon />
                     <TelegramIcon />
@@ -67,6 +117,22 @@ export default function Post() {
                     <a href="#">...more</a>
                   </span>
                 </Caption>
+                <Comments></Comments>
+                <CommentInput>
+                  <SentimentSatisfiedOutlinedIcon />
+                  <form>
+                    <input
+                      className={`comment-input-${post.postID}`}
+                      type="text"
+                      placeholder="Add a comment..."
+                      value={comment}
+                      onChange={(e) => setComment(() => e.target.value)}
+                    />
+                  </form>
+                  <a href="#" onClick={() => handlePostComment(post, comment)}>
+                    Post
+                  </a>
+                </CommentInput>
               </PostInfo>
             </UserPost>
           );

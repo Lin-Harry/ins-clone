@@ -68,4 +68,34 @@ const getPostImage = async (req, res) => {
     return res.status(500).json({ message: "Internal server error" });
   }
 };
-module.exports = { getAllPosts, createPost, getPostImage };
+
+const updatePosts = async (req,res) => {
+  try {
+    const {id} =req.params;
+    const {likes, isLiked, comments} =req.body;
+    const postObjectId = new mongoose.Types.ObjectId(id);
+    const updatedFields = {};
+    if (likes != undefined) {
+      updatedFields.likes = likes
+    }
+    if (comments !== undefined){
+      updatedFields.comments = comments;
+    }
+    if (isLiked !== undefined) {
+      updatedFields.isLiked = isLiked;
+    }
+    const updatePost = await Post.findOneAndUpdate(
+      {_id: postObjectId},
+      {$set: updatedFields},
+      {new:true}
+    )
+    if (!updatePost){
+      return res.status(404).json({error:"Post not found"})
+    }
+    res.json(updatePost);
+  } catch (error) {
+    console.error("Error updating post data:", error);
+    return res.status(500).json({message: "Internal server error"})
+  }
+}
+module.exports = { getAllPosts, createPost, getPostImage,updatePosts };
